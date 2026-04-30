@@ -1,186 +1,148 @@
+```html id="v5p2mz"
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>DNS SaaS Dashboard</title>
+<title>DNS Requests</title>
 
 <style>
-:root{
---bg:#f5f7ff;
---card:#ffffff;
---text:#111827;
---muted:#6b7280;
---border:#e5e7eb;
---primary:#2563eb;
---primary2:#4f46e5;
---shadow:0 10px 30px rgba(0,0,0,.08);
-}
-
-body.dark{
---bg:#0b1220;
---card:#111827;
---text:#f9fafb;
---muted:#9ca3af;
---border:#1f2937;
---primary:#3b82f6;
---primary2:#6366f1;
---shadow:0 10px 30px rgba(0,0,0,.35);
-}
-
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Inter,Arial,sans-serif;
+font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-background:var(--bg);
-color:var(--text);
-transition:.3s;
+background:#f3f4f6;
+padding:25px;
+color:#111827;
 }
 
-.topbar{
-max-width:1400px;
-margin:auto;
-padding:25px 20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:15px;
-flex-wrap:wrap;
-}
-
-.title h1{
-font-size:32px;
-margin-bottom:6px;
-}
-
-.title p{
-color:var(--muted);
-}
-
-.toggle{
-background:linear-gradient(135deg,var(--primary),var(--primary2));
-color:#fff;
-border:none;
-padding:10px 16px;
-border-radius:12px;
-cursor:pointer;
-font-weight:700;
-box-shadow:var(--shadow);
-}
-
-.container{
-max-width:1400px;
-margin:auto;
-padding:0 20px 30px;
+h1{
+text-align:center;
+margin-bottom:28px;
+font-size:34px;
 }
 
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:20px;
+grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+gap:24px;
 }
 
 .card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:18px;
+background:#fff;
 padding:22px;
-box-shadow:var(--shadow);
+border-radius:14px;
+box-shadow:0 8px 22px rgba(0,0,0,.08);
+border:1px solid #e5e7eb;
 }
 
 .card h2{
-font-size:20px;
-margin-bottom:18px;
+text-align:center;
+margin-bottom:20px;
+font-size:30px;
 }
 
 label{
 display:block;
 margin-top:14px;
-margin-bottom:8px;
-font-size:14px;
-color:var(--muted);
-font-weight:600;
+margin-bottom:7px;
+font-weight:700;
+font-size:15px;
 }
 
 textarea{
 width:100%;
-min-height:95px;
+height:95px;
+padding:10px;
+border:1px solid #d1d5db;
+border-radius:8px;
 resize:vertical;
-padding:12px;
-border:1px solid var(--border);
-border-radius:14px;
-background:transparent;
-color:var(--text);
 outline:none;
+font-size:14px;
 }
 
 textarea:focus{
-border-color:var(--primary);
-box-shadow:0 0 0 4px rgba(37,99,235,.12);
+border-color:#2563eb;
+box-shadow:0 0 0 3px rgba(37,99,235,.15);
 }
 
-.btn{
+button{
 margin-top:16px;
+padding:11px 18px;
 border:none;
-padding:12px 16px;
-border-radius:14px;
+border-radius:8px;
 cursor:pointer;
+font-size:15px;
 font-weight:700;
-width:100%;
-background:linear-gradient(135deg,var(--primary),var(--primary2));
+transition:.2s;
+}
+
+.green{
+background:#22c55e;
 color:#fff;
 }
 
-.btn:hover{
-transform:translateY(-1px);
+.green:hover{
+background:#16a34a;
 }
 
-.output{
-margin-top:22px;
+.blue{
+background:#2563eb;
+color:#fff;
+}
+
+.blue:hover{
+background:#1d4ed8;
+}
+
+.red{
+background:#ef4444;
+color:#fff;
+}
+
+.red:hover{
+background:#dc2626;
+}
+
+.outputBox{
+margin-top:28px;
+background:#fff;
+padding:22px;
+border-radius:14px;
+box-shadow:0 8px 22px rgba(0,0,0,.08);
+border:1px solid #e5e7eb;
+}
+
+#output{
+height:220px;
 }
 
 .actions{
 display:flex;
-gap:12px;
-margin-top:14px;
+gap:14px;
+margin-top:16px;
 flex-wrap:wrap;
-}
-
-.actions button{
-flex:1;
-min-width:140px;
-}
-
-.secondary{
-background:#10b981;
-color:#fff;
-}
-
-.danger{
-background:#ef4444;
-color:#fff;
 }
 
 .toast{
 position:fixed;
 top:20px;
 right:20px;
-background:#10b981;
+background:#22c55e;
 color:#fff;
 padding:12px 18px;
-border-radius:12px;
+border-radius:8px;
 display:none;
-box-shadow:var(--shadow);
-z-index:999;
-font-weight:700;
+font-weight:bold;
 }
 
 @media(max-width:768px){
-.title h1{font-size:26px;}
+h1{font-size:28px;}
+.card h2{font-size:24px;}
 }
 </style>
 </head>
@@ -188,69 +150,69 @@ font-weight:700;
 
 <div class="toast" id="toast">Copied Successfully</div>
 
-<div class="topbar">
-<div class="title">
-<h1>DNS SaaS Dashboard</h1>
-<p>Generate SPF, MX and A TXT records instantly</p>
-</div>
-
-<button class="toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
-</div>
-
-<div class="container">
+<h1>DNS Requests</h1>
 
 <div class="grid">
 
+<!-- SPF -->
 <div class="card">
 <h2>SPF Records</h2>
 
-<label>Domains</label>
+<label>SPF Domains (each on a new line):</label>
 <textarea id="spfDomains"></textarea>
 
-<label>IPs</label>
+<label>SPF Subdomains (each on a new line):</label>
+<textarea id="spfSubs"></textarea>
+
+<label>SPF IPs (each on a new line):</label>
 <textarea id="spfIps"></textarea>
 
-<button class="btn" onclick="generateSPF()">Generate SPF</button>
+<button class="green" onclick="generateSPF()">Generate SPF</button>
 </div>
 
+<!-- MX -->
 <div class="card">
 <h2>MX Records</h2>
 
-<label>Domains</label>
+<label>MX Domains (each on a new line):</label>
 <textarea id="mxDomains"></textarea>
 
-<label>IPs</label>
+<label>MX Subdomains (each on a new line):</label>
+<textarea id="mxSubs"></textarea>
+
+<label>MX IPs (each on a new line):</label>
 <textarea id="mxIps"></textarea>
 
-<button class="btn" onclick="generateMX()">Generate MX</button>
+<button class="green" onclick="generateMX()">Generate MX</button>
 </div>
 
+<!-- A -->
 <div class="card">
 <h2>A Records</h2>
 
-<label>Domains</label>
+<label>Domains (each on a new line):</label>
 <textarea id="aDomains"></textarea>
 
-<label>IPs</label>
+<label>Subdomains (each on a new line):</label>
+<textarea id="aSubs"></textarea>
+
+<label>A Records IPs (each on a new line):</label>
 <textarea id="aIps"></textarea>
 
-<button class="btn" onclick="generateA()">Generate A</button>
+<button class="green" onclick="generateA()">Generate A Records</button>
 </div>
 
 </div>
 
-<div class="card output">
-<h2>Output</h2>
+<div class="outputBox">
+<h2 style="margin-bottom:14px;">Output</h2>
 
-<textarea id="output" readonly style="min-height:220px;"></textarea>
+<textarea id="output" readonly></textarea>
 
 <div class="actions">
-<button class="btn secondary" onclick="copyOutput()">Copy Output</button>
-<button class="btn danger" onclick="clearAll()">Clear All</button>
+<button class="blue" onclick="copyOutput()">Copy Output</button>
+<button class="red" onclick="clearAll()">Clear All</button>
 </div>
-
-</div>
-
 </div>
 
 <script>
@@ -266,39 +228,67 @@ function setOutput(text){
 document.getElementById("output").value=text.trim();
 }
 
+/* SPF */
 function generateSPF(){
+
 let domains=lines("spfDomains");
+let subs=lines("spfSubs");
 let ips=lines("spfIps");
+
+let all=[...domains,...subs];
+
 let iptxt=ips.map(ip=>"ip4:"+ip).join(" ");
+
 let out="";
-domains.forEach(d=>{
+
+all.forEach(d=>{
 out+=`${d},${d},TXT,"v=spf1 ${iptxt} -all"\n`;
 });
+
 setOutput(out);
 }
 
+/* MX */
 function generateMX(){
+
 let domains=lines("mxDomains");
+let subs=lines("mxSubs");
 let ips=lines("mxIps");
+
+let all=[...domains,...subs];
+
 let list=ips.join(";");
+
 let out="";
-domains.forEach(d=>{
+
+all.forEach(d=>{
 out+=`${d},${d},TXT,MXrecords:${list}\n`;
 });
+
 setOutput(out);
 }
 
+/* A */
 function generateA(){
+
 let domains=lines("aDomains");
+let subs=lines("aSubs");
 let ips=lines("aIps");
+
+let all=[...domains,...subs];
+
 let list=ips.join(";");
+
 let out="";
-domains.forEach(d=>{
+
+all.forEach(d=>{
 out+=`${d},${d},TXT,Arecords:${list}\n`;
 });
+
 setOutput(out);
 }
 
+/* Copy */
 function copyOutput(){
 let out=document.getElementById("output");
 out.select();
@@ -306,36 +296,20 @@ document.execCommand("copy");
 showToast();
 }
 
+/* Clear */
 function clearAll(){
 document.querySelectorAll("textarea").forEach(t=>t.value="");
 }
 
+/* Toast */
 function showToast(){
 let t=document.getElementById("toast");
 t.style.display="block";
-setTimeout(()=>t.style.display="none",2000);
-}
-
-function toggleTheme(){
-document.body.classList.toggle("dark");
-
-let btn=document.querySelector(".toggle");
-
-if(document.body.classList.contains("dark")){
-btn.innerHTML="☀️ Light Mode";
-localStorage.theme="dark";
-}else{
-btn.innerHTML="🌙 Dark Mode";
-localStorage.theme="light";
-}
-}
-
-if(localStorage.theme==="dark"){
-document.body.classList.add("dark");
-document.querySelector(".toggle").innerHTML="☀️ Light Mode";
+setTimeout(()=>t.style.display="none",1800);
 }
 
 </script>
 
 </body>
 </html>
+```
