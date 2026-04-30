@@ -6,12 +6,7 @@
 <title>WMN3 DNS PRO</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Inter,Arial,sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Arial,sans-serif;}
 
 :root{
 --bg:#0f172a;
@@ -46,7 +41,6 @@ justify-content:center;
 align-items:center;
 min-height:100vh;
 padding:20px;
-animation:fade .7s ease;
 }
 
 .login-box{
@@ -87,17 +81,11 @@ border:1px solid var(--border);
 background:var(--input);
 color:var(--text);
 outline:none;
-transition:.2s;
 }
 
 textarea{
 height:92px;
 resize:vertical;
-}
-
-input:focus,textarea:focus{
-border-color:#3b82f6;
-box-shadow:0 0 0 4px rgba(59,130,246,.15);
 }
 
 button{
@@ -128,9 +116,7 @@ display:none;
 }
 
 /* DASHBOARD */
-#dashboard{
-display:none;
-}
+#dashboard{display:none;}
 
 .topbar{
 padding:22px 30px;
@@ -140,7 +126,6 @@ align-items:center;
 flex-wrap:wrap;
 gap:15px;
 background:linear-gradient(135deg,#2563eb,#4f46e5);
-animation:slideTop .8s ease;
 }
 
 /* BRAND */
@@ -150,19 +135,34 @@ align-items:center;
 gap:14px;
 }
 
-.logo-circle{
-width:56px;
-height:56px;
-border-radius:50%;
-background:linear-gradient(135deg,#ffffff,#dbeafe);
-color:#2563eb;
-font-size:24px;
-font-weight:900;
+.wmn3-logo{
+display:grid;
+grid-template-columns:repeat(2,28px);
+grid-template-rows:repeat(2,28px);
+gap:6px;
+}
+
+.wmn3-logo span{
+width:28px;
+height:28px;
 display:flex;
 align-items:center;
 justify-content:center;
-box-shadow:0 10px 30px rgba(255,255,255,.22);
-animation:logoSpin .8s ease;
+border-radius:10px;
+font-size:14px;
+font-weight:900;
+color:#fff;
+background:linear-gradient(135deg,#06b6d4,#2563eb);
+box-shadow:0 10px 22px rgba(0,0,0,.20);
+transition:.25s;
+}
+
+.wmn3-logo span:nth-child(2){background:linear-gradient(135deg,#8b5cf6,#2563eb);}
+.wmn3-logo span:nth-child(3){background:linear-gradient(135deg,#10b981,#059669);}
+.wmn3-logo span:nth-child(4){background:linear-gradient(135deg,#f59e0b,#ef4444);}
+
+.wmn3-logo:hover span{
+transform:translateY(-4px) scale(1.08);
 }
 
 .brand-text h1{
@@ -208,12 +208,6 @@ background:var(--card);
 border:1px solid var(--border);
 border-radius:22px;
 padding:24px;
-animation:cardIn .7s ease;
-}
-
-.card:hover{
-transform:translateY(-6px);
-box-shadow:0 20px 45px rgba(0,0,0,.22);
 }
 
 .card h2{
@@ -229,9 +223,7 @@ border-radius:22px;
 padding:24px;
 }
 
-#output{
-height:220px;
-}
+#output{height:220px;}
 
 .row{
 display:flex;
@@ -262,11 +254,6 @@ cursor:pointer;
 font-size:14px;
 }
 
-.history li:hover{
-background:rgba(59,130,246,.08);
-transform:translateX(5px);
-}
-
 .toast{
 position:fixed;
 top:20px;
@@ -279,42 +266,22 @@ display:none;
 z-index:999;
 }
 
-/* ANIMATIONS */
-@keyframes fade{
-from{opacity:0;}
-to{opacity:1;}
-}
-
-@keyframes slideTop{
-from{opacity:0;transform:translateY(-25px);}
-to{opacity:1;transform:translateY(0);}
-}
-
-@keyframes cardIn{
-from{opacity:0;transform:translateY(20px);}
-to{opacity:1;transform:translateY(0);}
-}
-
-@keyframes logoSpin{
-from{opacity:0;transform:scale(.5) rotate(-180deg);}
-to{opacity:1;transform:scale(1) rotate(0);}
-}
-
 @media(max-width:768px){
 .wrapper{padding:18px;}
 
-.brand-text h1{
-font-size:20px;
+.brand-text h1{font-size:20px;}
+.brand-text p{font-size:11px;}
+
+.wmn3-logo{
+grid-template-columns:repeat(2,24px);
+grid-template-rows:repeat(2,24px);
+gap:5px;
 }
 
-.brand-text p{
-font-size:11px;
-}
-
-.logo-circle{
-width:46px;
-height:46px;
-font-size:20px;
+.wmn3-logo span{
+width:24px;
+height:24px;
+font-size:12px;
 }
 }
 </style>
@@ -336,7 +303,6 @@ font-size:20px;
 <input type="password" id="password">
 
 <button class="login-btn" onclick="login()">Login</button>
-
 <div class="error" id="error">Invalid Username or Password</div>
 </div>
 </div>
@@ -347,12 +313,19 @@ font-size:20px;
 <div class="topbar">
 
 <div class="brand">
-<div class="logo-circle">W</div>
+
+<div class="wmn3-logo">
+<span>W</span>
+<span>M</span>
+<span>N</span>
+<span>3</span>
+</div>
 
 <div class="brand-text">
 <h1>WMN3 DNS PRO</h1>
 <p>IB Generator Tool</p>
 </div>
+
 </div>
 
 <div class="top-actions">
@@ -436,27 +409,19 @@ error.style.display="block";
 }
 }
 
-function logout(){
-location.reload();
-}
+function logout(){location.reload();}
 
 document.addEventListener("keydown",e=>{
-if(e.key==="Enter" && loginPage.style.display!=="none"){
-login();
-}
+if(e.key==="Enter" && loginPage.style.display!=="none"){login();}
 });
 
-/* theme */
-if(localStorage.theme==="light"){
-document.body.classList.add("light");
-}
+if(localStorage.theme==="light"){document.body.classList.add("light");}
 
 function toggleTheme(){
 document.body.classList.toggle("light");
 localStorage.theme=document.body.classList.contains("light")?"light":"dark";
 }
 
-/* helpers */
 function lines(id){
 return document.getElementById(id).value.split('\n').map(x=>x.trim()).filter(x=>x);
 }
@@ -472,10 +437,8 @@ toast.style.display="block";
 setTimeout(()=>toast.style.display="none",1800);
 }
 
-/* history */
 function saveHistory(result){
 if(!result)return;
-
 let h=JSON.parse(localStorage.getItem("dnsHistory")||"[]");
 h.unshift({date:new Date().toLocaleString(),data:result});
 h=h.slice(0,20);
@@ -486,7 +449,6 @@ renderHistory();
 function renderHistory(){
 historyList.innerHTML="";
 let h=JSON.parse(localStorage.getItem("dnsHistory")||"[]");
-
 h.forEach(item=>{
 let li=document.createElement("li");
 li.innerHTML=item.date;
@@ -495,50 +457,34 @@ historyList.appendChild(li);
 });
 }
 
-/* generators */
 function generateSPF(){
 let d=lines("spfDomains"),s=lines("spfSubs"),i=lines("spfIps");
 let txt=i.map(ip=>"ip4:"+ip).join(" ");
 let out="";
-
 d.forEach(domain=>{
-if(s.length){
-s.forEach(sub=>out+=`${domain},${sub},TXT,"v=spf1 ${txt} -all"\n`);
-}else{
-out+=`${domain},${domain},TXT,"v=spf1 ${txt} -all"\n`;
-}
+if(s.length){s.forEach(sub=>out+=`${domain},${sub},TXT,"v=spf1 ${txt} -all"\n`);}
+else{out+=`${domain},${domain},TXT,"v=spf1 ${txt} -all"\n`;}
 });
-
 setOutput(out);
 }
 
 function generateMX(){
 let d=lines("mxDomains"),s=lines("mxSubs"),i=lines("mxIps").join(";");
 let out="";
-
 d.forEach(domain=>{
-if(s.length){
-s.forEach(sub=>out+=`${domain},${sub},TXT,MXrecords:${i}\n`);
-}else{
-out+=`${domain},${domain},TXT,MXrecords:${i}\n`;
-}
+if(s.length){s.forEach(sub=>out+=`${domain},${sub},TXT,MXrecords:${i}\n`);}
+else{out+=`${domain},${domain},TXT,MXrecords:${i}\n`;}
 });
-
 setOutput(out);
 }
 
 function generateA(){
 let d=lines("aDomains"),s=lines("aSubs"),i=lines("aIps").join(";");
 let out="";
-
 d.forEach(domain=>{
-if(s.length){
-s.forEach(sub=>out+=`${domain},${sub},TXT,Arecords:${i}\n`);
-}else{
-out+=`${domain},${domain},TXT,Arecords:${i}\n`;
-}
+if(s.length){s.forEach(sub=>out+=`${domain},${sub},TXT,Arecords:${i}\n`);}
+else{out+=`${domain},${domain},TXT,Arecords:${i}\n`;}
 });
-
 setOutput(out);
 }
 
