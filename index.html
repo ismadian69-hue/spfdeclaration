@@ -1,1 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DNS Generator Tool</title>
 
+<style>
+body{
+    margin:0;
+    padding:20px;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f2f2f2;
+}
+h1{
+    text-align:center;
+    margin-bottom:30px;
+}
+.container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:25px;
+}
+.box{
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.08);
+}
+.box h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+label{
+    font-weight:bold;
+    display:block;
+    margin-top:15px;
+    margin-bottom:5px;
+}
+textarea{
+    width:100%;
+    height:90px;
+    resize:vertical;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+button{
+    margin-top:15px;
+    padding:10px 18px;
+    border:none;
+    background:#28a745;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:15px;
+}
+button:hover{
+    background:#218838;
+}
+#output{
+    width:100%;
+    margin-top:25px;
+    height:140px;
+}
+.copyBtn{
+    background:#007bff;
+}
+.copyBtn:hover{
+    background:#0069d9;
+}
+</style>
+</head>
+
+<body>
+
+<h1>DNS Requests</h1>
+
+<div class="container">
+
+<!-- SPF -->
+<div class="box">
+<h2>SPF Records</h2>
+
+<label>SPF Domains (each on a new line):</label>
+<textarea id="spfDomains"></textarea>
+
+<label>SPF Subdomains (each on a new line):</label>
+<textarea id="spfSubs"></textarea>
+
+<label>SPF IPs (each on a new line):</label>
+<textarea id="spfIps"></textarea>
+
+<button onclick="generateSPF()">Generate SPF</button>
+</div>
+
+<!-- MX -->
+<div class="box">
+<h2>MX Records</h2>
+
+<label>MX Domains (each on a new line):</label>
+<textarea id="mxDomains"></textarea>
+
+<label>MX Subdomains (each on a new line):</label>
+<textarea id="mxSubs"></textarea>
+
+<label>MX IPs (each on a new line):</label>
+<textarea id="mxIps"></textarea>
+
+<button onclick="generateMX()">Generate MX</button>
+</div>
+
+<!-- A -->
+<div class="box">
+<h2>A Records</h2>
+
+<label>Domains (each on a new line):</label>
+<textarea id="aDomains"></textarea>
+
+<label>Subdomains (each on a new line):</label>
+<textarea id="aSubs"></textarea>
+
+<label>A Records IPs (each on a new line):</label>
+<textarea id="aIps"></textarea>
+
+<button onclick="generateA()">Generate A Records</button>
+</div>
+
+</div>
+
+<textarea id="output" readonly placeholder="Generated records..."></textarea>
+<br>
+<button class="copyBtn" onclick="copyOutput()">Copy Output</button>
+
+<script>
+
+function lines(id){
+    return document.getElementById(id).value
+    .split('\n')
+    .map(x=>x.trim())
+    .filter(x=>x);
+}
+
+function setOutput(text){
+    document.getElementById("output").value = text;
+}
+
+function generateSPF(){
+    let domains = lines("spfDomains");
+    let ips = lines("spfIps");
+
+    let iptxt = ips.map(ip=>"ip4:"+ip).join(" ");
+    let out = "";
+
+    domains.forEach(d=>{
+        out += `${d},${d},TXT,"v=spf1 ${iptxt} -all"\n`;
+    });
+
+    setOutput(out);
+}
+
+function generateMX(){
+    let domains = lines("mxDomains");
+    let ips = lines("mxIps");
+    let out = "";
+
+    domains.forEach((d,i)=>{
+        let ip = ips[i] || ips[0] || "";
+        out += `${d},MX,10 mail.${d}\n`;
+        out += `mail.${d},A,${ip}\n`;
+    });
+
+    setOutput(out);
+}
+
+function generateA(){
+    let domains = lines("aDomains");
+    let ips = lines("aIps");
+    let out = "";
+
+    domains.forEach((d,i)=>{
+        let ip = ips[i] || ips[0] || "";
+        out += `${d},A,${ip}\n`;
+    });
+
+    setOutput(out);
+}
+
+function copyOutput(){
+    let output = document.getElementById("output");
+    output.select();
+    document.execCommand("copy");
+    alert("Copied!");
+}
+
+</script>
+
+</body>
+</html>
