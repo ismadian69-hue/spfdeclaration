@@ -3,121 +3,174 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>DNS Requests</title>
+<title>DNS Premium Dashboard</title>
 
 <style>
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
+font-family:Inter,Arial,sans-serif;
 }
 
 body{
-background:#f3f4f6;
-padding:25px;
-color:#111827;
+background:#f8fafc;
+color:#0f172a;
 }
 
-h1{
-text-align:center;
-margin-bottom:28px;
-font-size:34px;
+.topbar{
+background:linear-gradient(135deg,#2563eb,#4f46e5);
+padding:22px 30px;
+color:#fff;
+box-shadow:0 8px 25px rgba(37,99,235,.25);
+}
+
+.topbar h1{
+font-size:32px;
+font-weight:800;
+}
+
+.topbar p{
+opacity:.9;
+margin-top:5px;
+}
+
+.wrapper{
+padding:28px;
+max-width:1500px;
+margin:auto;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:18px;
+margin-bottom:22px;
+}
+
+.stat{
+background:#fff;
+padding:18px;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(15,23,42,.06);
+border:1px solid #eef2f7;
+}
+
+.stat h3{
+font-size:14px;
+color:#64748b;
+margin-bottom:10px;
+}
+
+.stat strong{
+font-size:28px;
+font-weight:800;
 }
 
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-gap:24px;
+gap:22px;
 }
 
 .card{
 background:#fff;
-padding:22px;
-border-radius:14px;
-box-shadow:0 8px 22px rgba(0,0,0,.08);
-border:1px solid #e5e7eb;
+border-radius:22px;
+padding:24px;
+box-shadow:0 12px 28px rgba(15,23,42,.07);
+border:1px solid #eef2f7;
+transition:.25s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+box-shadow:0 18px 35px rgba(15,23,42,.10);
 }
 
 .card h2{
-text-align:center;
-margin-bottom:20px;
-font-size:30px;
+font-size:24px;
+margin-bottom:16px;
+display:flex;
+align-items:center;
+gap:10px;
 }
+
+.icon{
+width:42px;
+height:42px;
+border-radius:12px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+color:#fff;
+font-weight:bold;
+}
+
+.blue{background:#2563eb;}
+.green{background:#10b981;}
+.purple{background:#7c3aed;}
 
 label{
 display:block;
 margin-top:14px;
 margin-bottom:7px;
+font-size:14px;
 font-weight:700;
-font-size:15px;
+color:#475569;
 }
 
 textarea{
 width:100%;
-height:95px;
-padding:10px;
-border:1px solid #d1d5db;
-border-radius:8px;
+height:92px;
+padding:12px;
+border:1px solid #dbe2ea;
+border-radius:14px;
 resize:vertical;
 outline:none;
+background:#f8fafc;
 font-size:14px;
+transition:.2s;
 }
 
 textarea:focus{
+background:#fff;
 border-color:#2563eb;
-box-shadow:0 0 0 3px rgba(37,99,235,.15);
+box-shadow:0 0 0 4px rgba(37,99,235,.10);
 }
 
 button{
 margin-top:16px;
-padding:11px 18px;
+width:100%;
+padding:12px;
 border:none;
-border-radius:8px;
+border-radius:14px;
 cursor:pointer;
+font-weight:800;
 font-size:15px;
-font-weight:700;
+color:#fff;
 transition:.2s;
 }
 
-.green{
-background:#22c55e;
-color:#fff;
+.btn-blue{background:linear-gradient(135deg,#2563eb,#1d4ed8);}
+.btn-green{background:linear-gradient(135deg,#10b981,#059669);}
+.btn-purple{background:linear-gradient(135deg,#7c3aed,#6d28d9);}
+
+button:hover{
+transform:translateY(-2px);
 }
 
-.green:hover{
-background:#16a34a;
-}
-
-.blue{
-background:#2563eb;
-color:#fff;
-}
-
-.blue:hover{
-background:#1d4ed8;
-}
-
-.red{
-background:#ef4444;
-color:#fff;
-}
-
-.red:hover{
-background:#dc2626;
-}
-
-.outputBox{
-margin-top:28px;
+.output{
+margin-top:25px;
 background:#fff;
-padding:22px;
-border-radius:14px;
-box-shadow:0 8px 22px rgba(0,0,0,.08);
-border:1px solid #e5e7eb;
+border-radius:22px;
+padding:24px;
+box-shadow:0 12px 28px rgba(15,23,42,.07);
+border:1px solid #eef2f7;
 }
 
 #output{
-height:220px;
+height:230px;
 }
 
 .actions{
@@ -127,21 +180,34 @@ margin-top:16px;
 flex-wrap:wrap;
 }
 
+.actions button{
+flex:1;
+}
+
+.copy{
+background:linear-gradient(135deg,#0ea5e9,#2563eb);
+}
+
+.clear{
+background:linear-gradient(135deg,#ef4444,#dc2626);
+}
+
 .toast{
 position:fixed;
 top:20px;
 right:20px;
-background:#22c55e;
+background:#10b981;
 color:#fff;
 padding:12px 18px;
-border-radius:8px;
+border-radius:12px;
+font-weight:800;
 display:none;
-font-weight:bold;
+box-shadow:0 10px 20px rgba(0,0,0,.12);
 }
 
 @media(max-width:768px){
-h1{font-size:28px;}
-.card h2{font-size:24px;}
+.wrapper{padding:18px;}
+.topbar h1{font-size:26px;}
 }
 </style>
 </head>
@@ -149,69 +215,84 @@ h1{font-size:28px;}
 
 <div class="toast" id="toast">Copied Successfully</div>
 
-<h1>DNS Requests</h1>
+<div class="topbar">
+<h1>DNS Premium Dashboard</h1>
+<p>Generate SPF, MX and A TXT records instantly</p>
+</div>
+
+<div class="wrapper">
+
+<div class="stats">
+<div class="stat"><h3>Records Types</h3><strong>3</strong></div>
+<div class="stat"><h3>Export Ready</h3><strong>TXT</strong></div>
+<div class="stat"><h3>Status</h3><strong>Online</strong></div>
+<div class="stat"><h3>Speed</h3><strong>Fast</strong></div>
+</div>
 
 <div class="grid">
 
 <!-- SPF -->
 <div class="card">
-<h2>SPF Records</h2>
+<h2><span class="icon blue">S</span> SPF Records</h2>
 
-<label>SPF Domains (each on a new line):</label>
+<label>Domains</label>
 <textarea id="spfDomains"></textarea>
 
-<label>SPF Subdomains (each on a new line):</label>
+<label>Subdomains</label>
 <textarea id="spfSubs"></textarea>
 
-<label>SPF IPs (each on a new line):</label>
+<label>IPs</label>
 <textarea id="spfIps"></textarea>
 
-<button class="green" onclick="generateSPF()">Generate SPF</button>
+<button class="btn-blue" onclick="generateSPF()">Generate SPF</button>
 </div>
 
 <!-- MX -->
 <div class="card">
-<h2>MX Records</h2>
+<h2><span class="icon green">M</span> MX Records</h2>
 
-<label>MX Domains (each on a new line):</label>
+<label>Domains</label>
 <textarea id="mxDomains"></textarea>
 
-<label>MX Subdomains (each on a new line):</label>
+<label>Subdomains</label>
 <textarea id="mxSubs"></textarea>
 
-<label>MX IPs (each on a new line):</label>
+<label>IPs</label>
 <textarea id="mxIps"></textarea>
 
-<button class="green" onclick="generateMX()">Generate MX</button>
+<button class="btn-green" onclick="generateMX()">Generate MX</button>
 </div>
 
 <!-- A -->
 <div class="card">
-<h2>A Records</h2>
+<h2><span class="icon purple">A</span> A Records</h2>
 
-<label>Domains (each on a new line):</label>
+<label>Domains</label>
 <textarea id="aDomains"></textarea>
 
-<label>Subdomains (each on a new line):</label>
+<label>Subdomains</label>
 <textarea id="aSubs"></textarea>
 
-<label>A Records IPs (each on a new line):</label>
+<label>IPs</label>
 <textarea id="aIps"></textarea>
 
-<button class="green" onclick="generateA()">Generate A Records</button>
+<button class="btn-purple" onclick="generateA()">Generate A Records</button>
 </div>
 
 </div>
 
-<div class="outputBox">
-<h2 style="margin-bottom:14px;">Output</h2>
+<div class="output">
+<h2 style="margin-bottom:14px;">Output Console</h2>
 
 <textarea id="output" readonly></textarea>
 
 <div class="actions">
-<button class="blue" onclick="copyOutput()">Copy Output</button>
-<button class="red" onclick="clearAll()">Clear All</button>
+<button class="copy" onclick="copyOutput()">Copy Output</button>
+<button class="clear" onclick="clearAll()">Clear All</button>
 </div>
+
+</div>
+
 </div>
 
 <script>
@@ -227,88 +308,51 @@ function setOutput(text){
 document.getElementById("output").value=text.trim();
 }
 
-/* SPF */
 function generateSPF(){
-
-let domains=lines("spfDomains");
-let subs=lines("spfSubs");
+let all=[...lines("spfDomains"),...lines("spfSubs")];
 let ips=lines("spfIps");
-
-let all=[...domains,...subs];
-
-let iptxt=ips.map(ip=>"ip4:"+ip).join(" ");
-
+let txt=ips.map(ip=>"ip4:"+ip).join(" ");
 let out="";
-
 all.forEach(d=>{
-out+=`${d},${d},TXT,"v=spf1 ${iptxt} -all"\n`;
+out+=`${d},${d},TXT,"v=spf1 ${txt} -all"\n`;
 });
-
 setOutput(out);
 }
 
-/* MX */
 function generateMX(){
-
-let domains=lines("mxDomains");
-let subs=lines("mxSubs");
-let ips=lines("mxIps");
-
-let all=[...domains,...subs];
-
-let list=ips.join(";");
-
+let all=[...lines("mxDomains"),...lines("mxSubs")];
+let ips=lines("mxIps").join(";");
 let out="";
-
 all.forEach(d=>{
-out+=`${d},${d},TXT,MXrecords:${list}\n`;
+out+=`${d},${d},TXT,MXrecords:${ips}\n`;
 });
-
 setOutput(out);
 }
 
-/* A */
 function generateA(){
-
-let domains=lines("aDomains");
-let subs=lines("aSubs");
-let ips=lines("aIps");
-
-let all=[...domains,...subs];
-
-let list=ips.join(";");
-
+let all=[...lines("aDomains"),...lines("aSubs")];
+let ips=lines("aIps").join(";");
 let out="";
-
 all.forEach(d=>{
-out+=`${d},${d},TXT,Arecords:${list}\n`;
+out+=`${d},${d},TXT,Arecords:${ips}\n`;
 });
-
 setOutput(out);
 }
 
-/* Copy */
 function copyOutput(){
 let out=document.getElementById("output");
 out.select();
 document.execCommand("copy");
-showToast();
-}
-
-/* Clear */
-function clearAll(){
-document.querySelectorAll("textarea").forEach(t=>t.value="");
-}
-
-/* Toast */
-function showToast(){
 let t=document.getElementById("toast");
 t.style.display="block";
 setTimeout(()=>t.style.display="none",1800);
+}
+
+function clearAll(){
+document.querySelectorAll("textarea").forEach(t=>t.value="");
 }
 
 </script>
 
 </body>
 </html>
-```
