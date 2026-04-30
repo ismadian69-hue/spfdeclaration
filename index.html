@@ -203,6 +203,7 @@ border-radius:12px;
 font-weight:800;
 display:none;
 box-shadow:0 10px 20px rgba(0,0,0,.12);
+z-index:999;
 }
 
 @media(max-width:768px){
@@ -308,46 +309,103 @@ function setOutput(text){
 document.getElementById("output").value=text.trim();
 }
 
+/* SPF */
 function generateSPF(){
-let all=[...lines("spfDomains"),...lines("spfSubs")];
-let ips=lines("spfIps");
-let txt=ips.map(ip=>"ip4:"+ip).join(" ");
-let out="";
-all.forEach(d=>{
-out+=`${d},${d},TXT,"v=spf1 ${txt} -all"\n`;
+
+let domains = lines("spfDomains");
+let subs = lines("spfSubs");
+let ips = lines("spfIps");
+
+let txt = ips.map(ip=>"ip4:"+ip).join(" ");
+let out = "";
+
+domains.forEach(domain=>{
+
+if(subs.length){
+
+subs.forEach(sub=>{
+out += `${domain},${sub},TXT,"v=spf1 ${txt} -all"\n`;
 });
+
+}else{
+
+out += `${domain},${domain},TXT,"v=spf1 ${txt} -all"\n`;
+
+}
+
+});
+
 setOutput(out);
 }
 
+/* MX */
 function generateMX(){
-let all=[...lines("mxDomains"),...lines("mxSubs")];
-let ips=lines("mxIps").join(";");
-let out="";
-all.forEach(d=>{
-out+=`${d},${d},TXT,MXrecords:${ips}\n`;
+
+let domains = lines("mxDomains");
+let subs = lines("mxSubs");
+let ips = lines("mxIps").join(";");
+
+let out = "";
+
+domains.forEach(domain=>{
+
+if(subs.length){
+
+subs.forEach(sub=>{
+out += `${domain},${sub},TXT,MXrecords:${ips}\n`;
 });
+
+}else{
+
+out += `${domain},${domain},TXT,MXrecords:${ips}\n`;
+
+}
+
+});
+
 setOutput(out);
 }
 
+/* A */
 function generateA(){
-let all=[...lines("aDomains"),...lines("aSubs")];
-let ips=lines("aIps").join(";");
-let out="";
-all.forEach(d=>{
-out+=`${d},${d},TXT,Arecords:${ips}\n`;
+
+let domains = lines("aDomains");
+let subs = lines("aSubs");
+let ips = lines("aIps").join(";");
+
+let out = "";
+
+domains.forEach(domain=>{
+
+if(subs.length){
+
+subs.forEach(sub=>{
+out += `${domain},${sub},TXT,Arecords:${ips}\n`;
 });
+
+}else{
+
+out += `${domain},${domain},TXT,Arecords:${ips}\n`;
+
+}
+
+});
+
 setOutput(out);
 }
 
+/* Copy */
 function copyOutput(){
 let out=document.getElementById("output");
 out.select();
 document.execCommand("copy");
+
 let t=document.getElementById("toast");
 t.style.display="block";
 setTimeout(()=>t.style.display="none",1800);
 }
 
+/* Clear */
 function clearAll(){
 document.querySelectorAll("textarea").forEach(t=>t.value="");
 }
