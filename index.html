@@ -2,213 +2,316 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>DNS Requests</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DNS Hacker Dashboard</title>
 
 <style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Consolas, monospace;
+}
+
 body{
-    margin:0;
-    padding:20px;
-    font-family:Arial,Helvetica,sans-serif;
-    background:#efefef;
+background:#000;
+color:#00ff88;
+overflow-x:hidden;
+position:relative;
 }
-h1{
-    text-align:center;
-    margin-bottom:30px;
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
 }
+
 .container{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-    gap:25px;
+padding:30px;
+max-width:1400px;
+margin:auto;
 }
-.box{
-    background:#fff;
-    border-radius:10px;
-    padding:20px;
-    box-shadow:0 0 10px rgba(0,0,0,.08);
+
+h1{
+text-align:center;
+font-size:40px;
+margin-bottom:30px;
+text-shadow:0 0 15px #00ff88;
 }
-.box h2{
-    text-align:center;
-    margin-top:0;
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:20px;
 }
+
+.card{
+background:rgba(0,0,0,.75);
+border:1px solid #00ff88;
+padding:20px;
+border-radius:12px;
+box-shadow:0 0 15px #00ff8840;
+}
+
+.card h2{
+margin-bottom:15px;
+text-align:center;
+}
+
 label{
-    display:block;
-    font-weight:bold;
-    margin-top:15px;
-    margin-bottom:6px;
+display:block;
+margin-top:12px;
+margin-bottom:6px;
+font-size:14px;
 }
+
 textarea{
-    width:100%;
-    min-height:90px;
-    resize:vertical;
-    padding:10px;
-    border:1px solid #ccc;
-    border-radius:5px;
-    box-sizing:border-box;
+width:100%;
+height:95px;
+background:#050505;
+border:1px solid #00ff88;
+color:#00ff88;
+padding:10px;
+border-radius:8px;
+resize:vertical;
+outline:none;
 }
+
+textarea:focus{
+box-shadow:0 0 10px #00ff88;
+}
+
 button{
-    margin-top:15px;
-    padding:10px 18px;
-    border:none;
-    border-radius:5px;
-    color:#fff;
-    cursor:pointer;
-    font-size:15px;
+margin-top:15px;
+padding:10px 18px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+transition:.3s;
 }
+
 .green{
-    background:#28a745;
+background:#00ff88;
+color:#000;
 }
+
 .green:hover{
-    background:#218838;
+box-shadow:0 0 15px #00ff88;
+transform:translateY(-2px);
 }
-.blue{
-    background:#007bff;
+
+.red{
+background:#ff0033;
+color:#fff;
 }
-.blue:hover{
-    background:#0069d9;
+
+.red:hover{
+box-shadow:0 0 15px #ff0033;
 }
+
+.output{
+margin-top:30px;
+}
+
 #output{
-    width:100%;
-    height:160px;
-    margin-top:25px;
+height:220px;
+background:#020202;
+}
+
+.actions{
+display:flex;
+gap:15px;
+margin-top:15px;
+flex-wrap:wrap;
+}
+
+.toast{
+position:fixed;
+top:20px;
+right:20px;
+background:#00ff88;
+color:#000;
+padding:12px 18px;
+border-radius:8px;
+font-weight:bold;
+display:none;
+z-index:999;
+}
+
+@media(max-width:768px){
+h1{font-size:28px;}
 }
 </style>
 </head>
-
 <body>
 
-<h1>DNS Requests</h1>
+<canvas id="matrix"></canvas>
+
+<div class="toast" id="toast">Copied Successfully</div>
 
 <div class="container">
 
-<!-- SPF -->
-<div class="box">
-<h2>SPF Records</h2>
+<h1>DNS HACKER DASHBOARD</h1>
 
-<label>SPF Domains (each on a new line):</label>
+<div class="grid">
+
+<div class="card">
+<h2>SPF RECORDS</h2>
+
+<label>Domains</label>
 <textarea id="spfDomains"></textarea>
 
-<label>SPF Subdomains (each on a new line):</label>
-<textarea id="spfSubs"></textarea>
-
-<label>SPF IPs (each on a new line):</label>
+<label>IPs</label>
 <textarea id="spfIps"></textarea>
 
 <button class="green" onclick="generateSPF()">Generate SPF</button>
 </div>
 
-<!-- MX -->
-<div class="box">
-<h2>MX Records</h2>
+<div class="card">
+<h2>MX RECORDS</h2>
 
-<label>MX Domains (each on a new line):</label>
+<label>Domains</label>
 <textarea id="mxDomains"></textarea>
 
-<label>MX Subdomains (each on a new line):</label>
-<textarea id="mxSubs"></textarea>
-
-<label>MX IPs (each on a new line):</label>
+<label>IPs</label>
 <textarea id="mxIps"></textarea>
 
 <button class="green" onclick="generateMX()">Generate MX</button>
 </div>
 
-<!-- A -->
-<div class="box">
-<h2>A Records</h2>
+<div class="card">
+<h2>A RECORDS</h2>
 
-<label>Domains (each on a new line):</label>
+<label>Domains</label>
 <textarea id="aDomains"></textarea>
 
-<label>Subdomains (each on a new line):</label>
-<textarea id="aSubs"></textarea>
-
-<label>A Records IPs (each on a new line):</label>
+<label>IPs</label>
 <textarea id="aIps"></textarea>
 
-<button class="green" onclick="generateA()">Generate A Records</button>
+<button class="green" onclick="generateA()">Generate A</button>
 </div>
 
 </div>
 
-<textarea id="output" readonly placeholder="Generated records..."></textarea>
-<br>
-<button class="blue" onclick="copyOutput()">Copy Output</button>
+<div class="card output">
+<h2>OUTPUT CONSOLE</h2>
+
+<textarea id="output" readonly></textarea>
+
+<div class="actions">
+<button class="green" onclick="copyOutput()">COPY</button>
+<button class="red" onclick="clearAll()">CLEAR</button>
+</div>
+
+</div>
+
+</div>
 
 <script>
 
 function lines(id){
-    return document.getElementById(id).value
-    .split('\n')
-    .map(v => v.trim())
-    .filter(v => v !== "");
+return document.getElementById(id).value
+.split('\n')
+.map(x=>x.trim())
+.filter(x=>x);
 }
 
 function setOutput(text){
-    document.getElementById("output").value = text.trim();
+document.getElementById("output").value=text.trim();
 }
 
-/* SPF */
 function generateSPF(){
-
-    let domains = lines("spfDomains");
-    let ips = lines("spfIps");
-
-    let ipString = ips.map(ip => "ip4:"+ip).join(" ");
-
-    let out = "";
-
-    domains.forEach(domain=>{
-        out += `${domain},${domain},TXT,"v=spf1 ${ipString} -all"\n`;
-    });
-
-    setOutput(out);
+let domains=lines("spfDomains");
+let ips=lines("spfIps");
+let iptxt=ips.map(ip=>"ip4:"+ip).join(" ");
+let out="";
+domains.forEach(d=>{
+out+=`${d},${d},TXT,"v=spf1 ${iptxt} -all"\n`;
+});
+setOutput(out);
 }
 
-/* MX TXT STYLE */
 function generateMX(){
-
-    let domains = lines("mxDomains");
-    let ips = lines("mxIps");
-
-    let ipList = ips.join(";");
-
-    let out = "";
-
-    domains.forEach(domain=>{
-        out += `${domain},${domain},TXT,MXrecords:${ipList}\n`;
-    });
-
-    setOutput(out);
+let domains=lines("mxDomains");
+let ips=lines("mxIps");
+let ipList=ips.join(";");
+let out="";
+domains.forEach(d=>{
+out+=`${d},${d},TXT,MXrecords:${ipList}\n`;
+});
+setOutput(out);
 }
 
-/* A TXT STYLE */
 function generateA(){
-
-    let domains = lines("aDomains");
-    let ips = lines("aIps");
-
-    let ipList = ips.join(";");
-
-    let out = "";
-
-    domains.forEach(domain=>{
-        out += `${domain},${domain},TXT,Arecords:${ipList}\n`;
-    });
-
-    setOutput(out);
+let domains=lines("aDomains");
+let ips=lines("aIps");
+let ipList=ips.join(";");
+let out="";
+domains.forEach(d=>{
+out+=`${d},${d},TXT,Arecords:${ipList}\n`;
+});
+setOutput(out);
 }
 
-/* COPY */
 function copyOutput(){
-
-    let output = document.getElementById("output");
-
-    output.select();
-    document.execCommand("copy");
-
-    alert("Copied!");
+let out=document.getElementById("output");
+out.select();
+document.execCommand("copy");
+showToast();
 }
+
+function clearAll(){
+document.querySelectorAll("textarea").forEach(t=>t.value="");
+}
+
+function showToast(){
+let t=document.getElementById("toast");
+t.style.display="block";
+setTimeout(()=>t.style.display="none",2000);
+}
+
+/* MATRIX EFFECT */
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+const chars="01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const fontSize=14;
+const columns=canvas.width/fontSize;
+const drops=[];
+
+for(let x=0;x<columns;x++) drops[x]=1;
+
+function draw(){
+ctx.fillStyle="rgba(0,0,0,0.05)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#00ff88";
+ctx.font=fontSize+"px monospace";
+
+for(let i=0;i<drops.length;i++){
+const text=chars[Math.floor(Math.random()*chars.length)];
+ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+
+if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
+drops[i]=0;
+
+drops[i]++;
+}
+}
+
+setInterval(draw,35);
+
+window.onresize=()=>{
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+};
 
 </script>
 
