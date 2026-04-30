@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Secure DNS Dashboard</title>
+<title>DNS Premium Dashboard</title>
 
 <style>
 *{
@@ -13,125 +13,69 @@ box-sizing:border-box;
 font-family:Inter,Arial,sans-serif;
 }
 
+:root{
+--bg:#0f172a;
+--card:#111827;
+--text:#ffffff;
+--muted:#94a3b8;
+--input:#020617;
+--border:#1f2937;
+}
+
+body.light{
+--bg:#f8fafc;
+--card:#ffffff;
+--text:#111827;
+--muted:#64748b;
+--input:#f8fafc;
+--border:#e5e7eb;
+}
+
 body{
-background:#0f172a;
-color:#fff;
+background:var(--bg);
+color:var(--text);
+transition:.3s;
 min-height:100vh;
-}
-
-/* LOGIN */
-.login-page{
-display:flex;
-justify-content:center;
-align-items:center;
-min-height:100vh;
-padding:20px;
-}
-
-.login-box{
-width:100%;
-max-width:420px;
-background:#111827;
-padding:35px;
-border-radius:22px;
-border:1px solid #1f2937;
-box-shadow:0 20px 40px rgba(0,0,0,.45);
-}
-
-.login-box h1{
-font-size:30px;
-margin-bottom:8px;
-text-align:center;
-}
-
-.login-box p{
-text-align:center;
-color:#94a3b8;
-margin-bottom:25px;
-}
-
-.login-box label{
-display:block;
-margin-top:14px;
-margin-bottom:8px;
-font-weight:700;
-color:#cbd5e1;
-}
-
-.login-box input{
-width:100%;
-padding:13px;
-border-radius:14px;
-border:1px solid #334155;
-background:#0f172a;
-color:#fff;
-outline:none;
-font-size:15px;
-}
-
-.login-box input:focus{
-border-color:#3b82f6;
-box-shadow:0 0 0 4px rgba(59,130,246,.15);
-}
-
-.login-btn{
-width:100%;
-margin-top:18px;
-padding:13px;
-border:none;
-border-radius:14px;
-background:linear-gradient(135deg,#2563eb,#1d4ed8);
-color:#fff;
-font-weight:800;
-font-size:15px;
-cursor:pointer;
-}
-
-.login-btn:hover{
-transform:translateY(-2px);
-}
-
-.error{
-margin-top:14px;
-color:#ef4444;
-font-size:14px;
-display:none;
-text-align:center;
-}
-
-/* DASHBOARD */
-#dashboard{
-display:none;
 }
 
 .topbar{
-background:linear-gradient(135deg,#020617,#111827);
 padding:22px 30px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-gap:15px;
 flex-wrap:wrap;
+gap:15px;
+background:linear-gradient(135deg,#2563eb,#4f46e5);
+color:#fff;
 }
 
 .topbar h1{
-font-size:30px;
+font-size:28px;
 }
 
-.logout{
-padding:10px 18px;
+.top-actions{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.top-actions button{
+padding:10px 16px;
 border:none;
 border-radius:12px;
-background:#ef4444;
-color:#fff;
-font-weight:800;
 cursor:pointer;
+font-weight:800;
+color:#fff;
 }
+
+.theme{background:#0ea5e9;}
+.logout{background:#ef4444;}
 
 .wrapper{
 padding:28px;
 max-width:1500px;
 margin:auto;
+animation:fade .6s ease;
 }
 
 .grid{
@@ -141,11 +85,17 @@ gap:22px;
 }
 
 .card{
-background:#111827;
+background:var(--card);
+border:1px solid var(--border);
 border-radius:22px;
 padding:24px;
-border:1px solid #1f2937;
-box-shadow:0 12px 28px rgba(0,0,0,.35);
+box-shadow:0 12px 28px rgba(0,0,0,.15);
+transition:.25s;
+animation:up .5s ease;
+}
+
+.card:hover{
+transform:translateY(-5px);
 }
 
 .card h2{
@@ -157,25 +107,20 @@ label{
 display:block;
 margin-top:14px;
 margin-bottom:7px;
-color:#94a3b8;
 font-weight:700;
+color:var(--muted);
 }
 
 textarea{
 width:100%;
 height:92px;
 padding:12px;
-border:1px solid #334155;
 border-radius:14px;
+border:1px solid var(--border);
+background:var(--input);
+color:var(--text);
 resize:vertical;
 outline:none;
-background:#0f172a;
-color:#fff;
-}
-
-textarea:focus{
-border-color:#3b82f6;
-box-shadow:0 0 0 4px rgba(59,130,246,.15);
 }
 
 button.action{
@@ -185,23 +130,27 @@ padding:12px;
 border:none;
 border-radius:14px;
 font-weight:800;
-color:#fff;
 cursor:pointer;
+color:#fff;
 background:linear-gradient(135deg,#2563eb,#1d4ed8);
+transition:.2s;
+}
+
+button.action:hover{
+transform:scale(1.02);
 }
 
 .output{
-margin-top:24px;
-background:#111827;
-padding:24px;
+margin-top:25px;
+background:var(--card);
+border:1px solid var(--border);
 border-radius:22px;
-border:1px solid #1f2937;
+padding:24px;
+animation:up .6s ease;
 }
 
 #output{
 height:220px;
-background:#020617;
-color:#22c55e;
 }
 
 .row{
@@ -221,8 +170,35 @@ cursor:pointer;
 color:#fff;
 }
 
-.copy{background:#0ea5e9;}
+.copy{background:#10b981;}
 .clear{background:#ef4444;}
+
+.history{
+margin-top:25px;
+background:var(--card);
+border:1px solid var(--border);
+border-radius:22px;
+padding:24px;
+}
+
+.history ul{
+margin-top:14px;
+list-style:none;
+max-height:220px;
+overflow:auto;
+}
+
+.history li{
+padding:10px;
+border-bottom:1px solid var(--border);
+font-size:14px;
+cursor:pointer;
+transition:.2s;
+}
+
+.history li:hover{
+background:rgba(59,130,246,.08);
+}
 
 .toast{
 position:fixed;
@@ -231,42 +207,40 @@ right:20px;
 background:#10b981;
 padding:12px 18px;
 border-radius:12px;
-display:none;
 font-weight:800;
+display:none;
+color:#fff;
+z-index:999;
+animation:fade .3s;
+}
+
+@keyframes fade{
+from{opacity:0;}
+to{opacity:1;}
+}
+
+@keyframes up{
+from{opacity:0;transform:translateY(15px);}
+to{opacity:1;transform:translateY(0);}
 }
 
 @media(max-width:768px){
-.topbar h1{font-size:24px;}
 .wrapper{padding:18px;}
+.topbar h1{font-size:22px;}
 }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div class="login-page" id="loginPage">
-<div class="login-box">
-<h1>🔒 Secure Access</h1>
-<p>Please login to continue</p>
-
-<label>Username</label>
-<input type="text" id="username">
-
-<label>Password</label>
-<input type="password" id="password">
-
-<button class="login-btn" onclick="login()">Login</button>
-
-<div class="error" id="error">Invalid Username or Password</div>
-</div>
-</div>
-
-<!-- DASHBOARD -->
-<div id="dashboard">
+<div class="toast" id="toast">Copied Successfully</div>
 
 <div class="topbar">
 <h1>DNS Premium Dashboard</h1>
+
+<div class="top-actions">
+<button class="theme" onclick="toggleTheme()">🌙 Theme</button>
 <button class="logout" onclick="logout()">Logout</button>
+</div>
 </div>
 
 <div class="wrapper">
@@ -318,39 +292,23 @@ font-weight:800;
 </div>
 </div>
 
-</div>
+<div class="history">
+<h2>History</h2>
+<ul id="historyList"></ul>
 </div>
 
-<div class="toast" id="toast">Copied Successfully</div>
+</div>
 
 <script>
 
-/* CHANGE LOGIN HERE */
-const USERNAME = "admin";
-const PASSWORD = "123456";
-
-/* LOGIN */
-function login(){
-let u=document.getElementById("username").value.trim();
-let p=document.getElementById("password").value.trim();
-
-if(u===USERNAME && p===PASSWORD){
-document.getElementById("loginPage").style.display="none";
-document.getElementById("dashboard").style.display="block";
-sessionStorage.setItem("logged","yes");
-}else{
-document.getElementById("error").style.display="block";
-}
+/* THEME */
+if(localStorage.theme==="light"){
+document.body.classList.add("light");
 }
 
-function logout(){
-sessionStorage.removeItem("logged");
-location.reload();
-}
-
-if(sessionStorage.getItem("logged")==="yes"){
-document.getElementById("loginPage").style.display="none";
-document.getElementById("dashboard").style.display="block";
+function toggleTheme(){
+document.body.classList.toggle("light");
+localStorage.theme=document.body.classList.contains("light") ? "light":"dark";
 }
 
 /* HELPERS */
@@ -363,7 +321,51 @@ return document.getElementById(id).value
 
 function setOutput(text){
 document.getElementById("output").value=text.trim();
+saveHistory(text.trim());
 }
+
+function showToast(msg="Copied Successfully"){
+let t=document.getElementById("toast");
+t.innerText=msg;
+t.style.display="block";
+setTimeout(()=>t.style.display="none",1800);
+}
+
+/* HISTORY */
+function saveHistory(result){
+if(!result) return;
+
+let history=JSON.parse(localStorage.getItem("dnsHistory")||"[]");
+
+history.unshift({
+date:new Date().toLocaleString(),
+data:result
+});
+
+history=history.slice(0,20);
+
+localStorage.setItem("dnsHistory",JSON.stringify(history));
+
+renderHistory();
+}
+
+function renderHistory(){
+let list=document.getElementById("historyList");
+let history=JSON.parse(localStorage.getItem("dnsHistory")||"[]");
+
+list.innerHTML="";
+
+history.forEach((item,i)=>{
+let li=document.createElement("li");
+li.innerHTML=`${item.date}`;
+li.onclick=()=>{
+document.getElementById("output").value=item.data;
+};
+list.appendChild(li);
+});
+}
+
+renderHistory();
 
 /* SPF */
 function generateSPF(){
@@ -431,10 +433,7 @@ function copyOutput(){
 let out=document.getElementById("output");
 out.select();
 document.execCommand("copy");
-
-let t=document.getElementById("toast");
-t.style.display="block";
-setTimeout(()=>t.style.display="none",1800);
+showToast();
 }
 
 /* CLEAR */
@@ -442,11 +441,10 @@ function clearAll(){
 document.querySelectorAll("textarea").forEach(t=>t.value="");
 }
 
-document.addEventListener("keydown",function(e){
-if(e.key==="Enter" && document.getElementById("loginPage").style.display!=="none"){
-login();
+/* LOGOUT */
+function logout(){
+location.reload();
 }
-});
 
 </script>
 
