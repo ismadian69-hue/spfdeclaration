@@ -1,10 +1,9 @@
-```html id="dns-vercel-pro-animations-full-001"
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>DNS Premium Dashboard</title>
+<title>WMN3 DNS PRO</title>
 
 <style>
 *{
@@ -38,7 +37,6 @@ color:var(--text);
 min-height:100vh;
 transition:.3s;
 overflow-x:hidden;
-animation:pageFade .7s ease;
 }
 
 /* LOGIN */
@@ -48,6 +46,7 @@ justify-content:center;
 align-items:center;
 min-height:100vh;
 padding:20px;
+animation:fade .7s ease;
 }
 
 .login-box{
@@ -58,7 +57,6 @@ padding:35px;
 border-radius:22px;
 border:1px solid var(--border);
 box-shadow:0 20px 45px rgba(0,0,0,.35);
-animation:cardIn .7s ease;
 }
 
 .login-box h1{
@@ -73,7 +71,6 @@ color:var(--muted);
 margin-bottom:22px;
 }
 
-.login-box label,
 label{
 display:block;
 margin-top:14px;
@@ -82,8 +79,7 @@ font-weight:700;
 color:var(--muted);
 }
 
-.login-box input,
-textarea{
+input,textarea{
 width:100%;
 padding:13px;
 border-radius:14px;
@@ -91,7 +87,7 @@ border:1px solid var(--border);
 background:var(--input);
 color:var(--text);
 outline:none;
-transition:.22s;
+transition:.2s;
 }
 
 textarea{
@@ -99,11 +95,9 @@ height:92px;
 resize:vertical;
 }
 
-textarea:focus,
-input:focus{
+input:focus,textarea:focus{
 border-color:#3b82f6;
 box-shadow:0 0 0 4px rgba(59,130,246,.15);
-transform:scale(1.01);
 }
 
 button{
@@ -112,38 +106,16 @@ border-radius:14px;
 font-weight:800;
 cursor:pointer;
 color:#fff;
-position:relative;
-overflow:hidden;
-transition:.18s;
+transition:.2s;
 }
 
 button:hover{
 transform:translateY(-2px);
 }
 
-button:active{
-transform:scale(.97);
-}
-
-button::after{
-content:"";
-position:absolute;
-top:0;
-left:-120%;
+.login-btn,.action{
 width:100%;
-height:100%;
-background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
-transition:.55s;
-}
-
-button:hover::after{
-left:120%;
-}
-
-.login-btn,
-button.action{
-width:100%;
-margin-top:18px;
+margin-top:16px;
 padding:13px;
 background:linear-gradient(135deg,#2563eb,#1d4ed8);
 }
@@ -168,8 +140,42 @@ align-items:center;
 flex-wrap:wrap;
 gap:15px;
 background:linear-gradient(135deg,#2563eb,#4f46e5);
-color:#fff;
 animation:slideTop .8s ease;
+}
+
+/* BRAND */
+.brand{
+display:flex;
+align-items:center;
+gap:14px;
+}
+
+.logo-circle{
+width:56px;
+height:56px;
+border-radius:50%;
+background:linear-gradient(135deg,#ffffff,#dbeafe);
+color:#2563eb;
+font-size:24px;
+font-weight:900;
+display:flex;
+align-items:center;
+justify-content:center;
+box-shadow:0 10px 30px rgba(255,255,255,.22);
+animation:logoSpin .8s ease;
+}
+
+.brand-text h1{
+font-size:26px;
+line-height:1;
+color:#fff;
+}
+
+.brand-text p{
+font-size:13px;
+margin-top:4px;
+opacity:.9;
+color:#fff;
 }
 
 .top-actions{
@@ -203,11 +209,10 @@ border:1px solid var(--border);
 border-radius:22px;
 padding:24px;
 animation:cardIn .7s ease;
-transition:transform .25s ease, box-shadow .25s ease;
 }
 
 .card:hover{
-transform:translateY(-8px) scale(1.01);
+transform:translateY(-6px);
 box-shadow:0 20px 45px rgba(0,0,0,.22);
 }
 
@@ -222,7 +227,6 @@ background:var(--card);
 border:1px solid var(--border);
 border-radius:22px;
 padding:24px;
-animation:cardIn .8s ease;
 }
 
 #output{
@@ -256,12 +260,11 @@ padding:10px;
 border-bottom:1px solid var(--border);
 cursor:pointer;
 font-size:14px;
-transition:.2s;
 }
 
 .history li:hover{
-transform:translateX(6px);
 background:rgba(59,130,246,.08);
+transform:translateX(5px);
 }
 
 .toast{
@@ -269,17 +272,15 @@ position:fixed;
 top:20px;
 right:20px;
 background:#10b981;
-color:#fff;
 padding:12px 18px;
 border-radius:12px;
 font-weight:800;
 display:none;
 z-index:999;
-animation:toastPop .35s ease;
 }
 
 /* ANIMATIONS */
-@keyframes pageFade{
+@keyframes fade{
 from{opacity:0;}
 to{opacity:1;}
 }
@@ -290,17 +291,31 @@ to{opacity:1;transform:translateY(0);}
 }
 
 @keyframes cardIn{
-from{opacity:0;transform:translateY(25px);}
+from{opacity:0;transform:translateY(20px);}
 to{opacity:1;transform:translateY(0);}
 }
 
-@keyframes toastPop{
-from{opacity:0;transform:scale(.8);}
-to{opacity:1;transform:scale(1);}
+@keyframes logoSpin{
+from{opacity:0;transform:scale(.5) rotate(-180deg);}
+to{opacity:1;transform:scale(1) rotate(0);}
 }
 
 @media(max-width:768px){
 .wrapper{padding:18px;}
+
+.brand-text h1{
+font-size:20px;
+}
+
+.brand-text p{
+font-size:11px;
+}
+
+.logo-circle{
+width:46px;
+height:46px;
+font-size:20px;
+}
 }
 </style>
 </head>
@@ -312,7 +327,7 @@ to{opacity:1;transform:scale(1);}
 <div class="login-page" id="loginPage">
 <div class="login-box">
 <h1>🔒 Secure Access</h1>
-<p>Please login to continue</p>
+<p>Login to continue</p>
 
 <label>Username</label>
 <input type="text" id="username">
@@ -330,12 +345,21 @@ to{opacity:1;transform:scale(1);}
 <div id="dashboard">
 
 <div class="topbar">
-<h1>DNS Premium Dashboard</h1>
+
+<div class="brand">
+<div class="logo-circle">W</div>
+
+<div class="brand-text">
+<h1>WMN3 DNS PRO</h1>
+<p>Premium Generator Tool</p>
+</div>
+</div>
 
 <div class="top-actions">
 <button class="theme" onclick="toggleTheme()">🌙 Theme</button>
 <button class="logout" onclick="logout()">Logout</button>
 </div>
+
 </div>
 
 <div class="wrapper">
@@ -399,23 +423,14 @@ to{opacity:1;transform:scale(1);}
 const USERNAME="admin";
 const PASSWORD="123456";
 
-/* force login */
 dashboard.style.display="none";
 loginPage.style.display="flex";
 
 function login(){
-let u=username.value.trim();
-let p=password.value.trim();
-
-if(u===USERNAME && p===PASSWORD){
+if(username.value.trim()===USERNAME && password.value.trim()===PASSWORD){
 loginPage.style.display="none";
 dashboard.style.display="block";
 renderHistory();
-
-document.querySelectorAll(".card").forEach((card,i)=>{
-card.style.animationDelay=(i*0.12)+"s";
-});
-
 }else{
 error.style.display="block";
 }
@@ -443,23 +458,12 @@ localStorage.theme=document.body.classList.contains("light")?"light":"dark";
 
 /* helpers */
 function lines(id){
-return document.getElementById(id).value
-.split('\n')
-.map(x=>x.trim())
-.filter(x=>x);
+return document.getElementById(id).value.split('\n').map(x=>x.trim()).filter(x=>x);
 }
 
 function setOutput(text){
 output.value=text.trim();
 saveHistory(text.trim());
-
-output.animate([
-{opacity:.4,transform:"scale(.99)"},
-{opacity:1,transform:"scale(1)"}
-],{
-duration:260,
-easing:"ease"
-});
 }
 
 function showToast(msg="Copied Successfully"){
@@ -472,25 +476,18 @@ setTimeout(()=>toast.style.display="none",1800);
 function saveHistory(result){
 if(!result)return;
 
-let history=JSON.parse(localStorage.getItem("dnsHistory")||"[]");
-
-history.unshift({
-date:new Date().toLocaleString(),
-data:result
-});
-
-history=history.slice(0,20);
-
-localStorage.setItem("dnsHistory",JSON.stringify(history));
+let h=JSON.parse(localStorage.getItem("dnsHistory")||"[]");
+h.unshift({date:new Date().toLocaleString(),data:result});
+h=h.slice(0,20);
+localStorage.setItem("dnsHistory",JSON.stringify(h));
 renderHistory();
 }
 
 function renderHistory(){
 historyList.innerHTML="";
+let h=JSON.parse(localStorage.getItem("dnsHistory")||"[]");
 
-let history=JSON.parse(localStorage.getItem("dnsHistory")||"[]");
-
-history.forEach(item=>{
+h.forEach(item=>{
 let li=document.createElement("li");
 li.innerHTML=item.date;
 li.onclick=()=>output.value=item.data;
@@ -498,19 +495,15 @@ historyList.appendChild(li);
 });
 }
 
-/* generate */
+/* generators */
 function generateSPF(){
-let domains=lines("spfDomains");
-let subs=lines("spfSubs");
-let ips=lines("spfIps");
-let txt=ips.map(ip=>"ip4:"+ip).join(" ");
+let d=lines("spfDomains"),s=lines("spfSubs"),i=lines("spfIps");
+let txt=i.map(ip=>"ip4:"+ip).join(" ");
 let out="";
 
-domains.forEach(domain=>{
-if(subs.length){
-subs.forEach(sub=>{
-out+=`${domain},${sub},TXT,"v=spf1 ${txt} -all"\n`;
-});
+d.forEach(domain=>{
+if(s.length){
+s.forEach(sub=>out+=`${domain},${sub},TXT,"v=spf1 ${txt} -all"\n`);
 }else{
 out+=`${domain},${domain},TXT,"v=spf1 ${txt} -all"\n`;
 }
@@ -520,18 +513,14 @@ setOutput(out);
 }
 
 function generateMX(){
-let domains=lines("mxDomains");
-let subs=lines("mxSubs");
-let ips=lines("mxIps").join(";");
+let d=lines("mxDomains"),s=lines("mxSubs"),i=lines("mxIps").join(";");
 let out="";
 
-domains.forEach(domain=>{
-if(subs.length){
-subs.forEach(sub=>{
-out+=`${domain},${sub},TXT,MXrecords:${ips}\n`;
-});
+d.forEach(domain=>{
+if(s.length){
+s.forEach(sub=>out+=`${domain},${sub},TXT,MXrecords:${i}\n`);
 }else{
-out+=`${domain},${domain},TXT,MXrecords:${ips}\n`;
+out+=`${domain},${domain},TXT,MXrecords:${i}\n`;
 }
 });
 
@@ -539,18 +528,14 @@ setOutput(out);
 }
 
 function generateA(){
-let domains=lines("aDomains");
-let subs=lines("aSubs");
-let ips=lines("aIps").join(";");
+let d=lines("aDomains"),s=lines("aSubs"),i=lines("aIps").join(";");
 let out="";
 
-domains.forEach(domain=>{
-if(subs.length){
-subs.forEach(sub=>{
-out+=`${domain},${sub},TXT,Arecords:${ips}\n`;
-});
+d.forEach(domain=>{
+if(s.length){
+s.forEach(sub=>out+=`${domain},${sub},TXT,Arecords:${i}\n`);
 }else{
-out+=`${domain},${domain},TXT,Arecords:${ips}\n`;
+out+=`${domain},${domain},TXT,Arecords:${i}\n`;
 }
 });
 
@@ -570,4 +555,3 @@ document.querySelectorAll("textarea").forEach(t=>t.value="");
 
 </body>
 </html>
-```
